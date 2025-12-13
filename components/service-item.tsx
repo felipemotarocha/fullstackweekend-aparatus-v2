@@ -1,16 +1,21 @@
-import Image from "next/image";
-import { Button } from "./ui/button";
-import { formatCurrency } from "@/lib/utils";
-import { BarbershopService } from "@/generated/prisma/client";
+"use client"
+
+import Image from "next/image"
+import { Button } from "./ui/button"
+import { Sheet, SheetTrigger } from "./ui/sheet"
+import BookingSheet from "./booking-sheet"
+import { formatCurrency } from "@/lib/utils"
+import type { BarbershopService } from "@/generated/prisma/client"
 
 interface ServiceItemProps {
-  service: BarbershopService;
+  service: BarbershopService
+  barbershopName: string
 }
 
-const ServiceItem = ({ service }: ServiceItemProps) => {
+const ServiceItem = ({ service, barbershopName }: ServiceItemProps) => {
   return (
     <div className="flex gap-3 rounded-2xl border border-border bg-card p-3">
-      <div className="relative h-[110px] w-[110px] shrink-0">
+      <div className="relative h-[6.875rem] w-[6.875rem] shrink-0">
         <Image
           src={service.imageUrl}
           alt={service.name}
@@ -27,13 +32,18 @@ const ServiceItem = ({ service }: ServiceItemProps) => {
           <p className="text-sm font-bold">
             {formatCurrency(service.priceInCents)}
           </p>
-          <Button className="rounded-full" size="sm">
-            Reservar
-          </Button>
+          <Sheet>
+            <SheetTrigger asChild>
+              <Button className="rounded-full" size="sm">
+                Reservar
+              </Button>
+            </SheetTrigger>
+            <BookingSheet service={service} barbershopName={barbershopName} />
+          </Sheet>
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default ServiceItem;
+export default ServiceItem
