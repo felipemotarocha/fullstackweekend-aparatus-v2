@@ -1,9 +1,11 @@
+import { Smartphone } from "lucide-react";
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import { Smartphone } from "lucide-react";
-import { getBarbershopById } from "@/data/barbershops";
-import { PageSectionTitle } from "@/components/ui/page";
+
 import ServiceItem from "@/components/service-item";
+import { PageSectionTitle } from "@/components/ui/page";
+import { getBarbershopById } from "@/data/barbershops";
+
 import BackButton from "./_components/back-button";
 import CopyButton from "./_components/copy-button";
 
@@ -18,12 +20,14 @@ const BarbershopPage = async ({ params }: PageProps<"/barbershops/[id]">) => {
   return (
     <div>
       {/* Banner Header */}
-      <div className="relative h-[297px] w-full">
+      <div className="relative h-[18.5625rem] w-full">
         <Image
           src={barbershop.imageUrl}
           alt={barbershop.name}
           fill
+          sizes="100vw"
           className="object-cover"
+          loading={"eager"}
         />
         <BackButton />
       </div>
@@ -38,6 +42,7 @@ const BarbershopPage = async ({ params }: PageProps<"/barbershops/[id]">) => {
                 src={barbershop.imageUrl}
                 alt={barbershop.name}
                 fill
+                sizes="30px"
                 className="rounded-full object-cover"
               />
             </div>
