@@ -30,3 +30,4 @@ Tecnologias utilizadas:
 - NUNCA chame o Prisma de componentes. SEMPRE crie uma função em @data, assim como é feito em @app/page.tsx.
 - SEMPRE use rem para medidas e nunca px.
 - SEMPRE use a biblioteca "lucide-react" para renderizar ícones.
+- Antes de inserir o footer, veja os arquivos layout.tsx, se ele já não está sendo renderizado.

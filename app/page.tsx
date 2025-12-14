@@ -4,6 +4,7 @@ import banner from "@/public/banner.png";
 import BookingItem from "@/components/booking-item";
 
 import { getBarbershops, getPopularBarbershops } from "@/data/barbershops";
+import { getUserBookings } from "@/data/bookings";
 import BarbershopItem from "@/components/barbershop-item";
 import {
   PageContainer,
@@ -14,10 +15,11 @@ import {
 import Footer from "@/components/footer";
 import QuickSearch from "@/components/quick-search";
 
-// Server Component
 export default async function Home() {
   const barbershops = await getBarbershops();
   const popularBarbershops = await getPopularBarbershops();
+  const { confirmedBookings } = await getUserBookings();
+
   return (
     <div>
       <Header />
@@ -29,11 +31,12 @@ export default async function Home() {
           sizes="100vw"
           className="h-auto w-full"
         />
-        <PageSectionContent>
-          {/* Composition Pattern */}
-          <PageSectionTitle>Agendamentos</PageSectionTitle>
-          <BookingItem />
-        </PageSectionContent>
+        {confirmedBookings.length > 0 && (
+          <PageSectionContent>
+            <PageSectionTitle>Agendamentos</PageSectionTitle>
+            <BookingItem booking={confirmedBookings[0]} />
+          </PageSectionContent>
+        )}
         <PageSectionContent>
           <PageSectionTitle>Barbearias</PageSectionTitle>
           <PageSectionScroller>

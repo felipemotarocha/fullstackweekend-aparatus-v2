@@ -1,9 +1,7 @@
 "use server"; // don't forget to add this!
 
 import { z } from "zod";
-import { actionClient } from "@/lib/action-client";
-import { auth } from "@/lib/auth";
-import { headers } from "next/headers";
+import { protectedActionClient } from "@/lib/action-client";
 import { returnValidationErrors } from "next-safe-action";
 import { prisma } from "@/lib/prisma";
 import { isPast } from "date-fns";
@@ -14,21 +12,12 @@ const inputSchema = z.object({
   date: z.date(),
 });
 
-export const createBooking = actionClient
+export const createBooking = protectedActionClient
   .inputSchema(inputSchema)
-  .action(async ({ parsedInput: { serviceId, date } }) => {
+  .action(async ({ parsedInput: { serviceId, date }, ctx: { user } }) => {
     if (isPast(date)) {
       returnValidationErrors(inputSchema, {
         _errors: ["Data e hora selecionadas já passaram."],
-      });
-    }
-    const session = await auth.api.getSession({
-      headers: await headers(),
-    });
-    // Usuário está logado?
-    if (!session?.user) {
-      returnValidationErrors(inputSchema, {
-        _errors: ["Não autorizado. Por favor, faça login para continuar."],
       });
     }
     const service = await prisma.barbershopService.findUnique({
@@ -60,7 +49,7 @@ export const createBooking = actionClient
       data: {
         serviceId,
         date: date.toISOString(),
-        userId: session.user.id,
+        userId: user.id,
         barbershopId: service.barbershopId,
       },
     });
